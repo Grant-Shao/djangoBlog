@@ -1,0 +1,51 @@
+
+{% include 'header.html' %}
+
+<b>{{ SITE }}</b>
+
+<br />
+<br />
+<a href="/">回到首页</a>
+<br />
+<br />
+<br />
+<div>
+    标题:
+   <h1> {{ obj.title }}</h1>
+</div>
+
+<div>
+    内容:<br />
+    {{ obj.content }}
+</div>
+<br />
+<div>
+    标签:
+    {{ obj.tag_id }}
+</div>
+<br />
+<div>
+    类别:
+    {{ obj.type }}
+</div>
+
+<br />
+<br />
+评论:<br />
+{% for comment in comments %}
+    {{ comment }} <br />
+
+{% endfor %}
+
+<br />
+<br />
+<form method="POST">
+    {% csrf_token %}
+    <textarea rows=7 cols=50 name="comment" ></textarea>
+    <br />
+    <input type="submit" name="CommentBotton" value="submit">
+</form>
+
+
+
+{% include 'footer.html' %}

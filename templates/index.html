@@ -1,0 +1,34 @@
+{% include 'header.html' %}
+
+<div class="col-md-3">
+    <h1>{{ SITE }}</h1>
+    <h2>类别</h2>
+    <div>
+    {% for type in types %}
+        <a href="/type/{{ type }}/1/">{{ type }}</a>
+    {% endfor %}
+    </div>
+    <h2>标签</h2>
+    <div>
+    {% for tag in tags %}
+        <a href="/tag/{{ tag }}/1/">{{ tag }}</a>
+    {% endfor %}
+    </div>
+</div>
+
+<div class="col-md-7">
+    <h2>最新文章</h2>
+    {% for article in articles %}
+        <div>
+            <a href="/article/{{ article.id }}/">{{ article.title }}</a>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="col-md-2">
+    <h6>登陆</h6>
+    <h6>注册</h6>
+    <h6><a href="/post/">发布</a></h6>
+</div>
+
+{% include 'footer.html' %}

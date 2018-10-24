@@ -1,0 +1,44 @@
+{% include 'header.html' %}
+
+
+<b>{{ SITE }}</b>
+<br />
+<br />
+<a href="/">回到首页</a>
+<br />
+<br />
+
+<br />
+<h1>{{ type }}</h1><br />
+<br />
+<br />
+<br />
+
+{% for article in pageitems %}
+    <a href="/article/{{ article.id }}/">{{ article.title }}</a>
+    <br />
+{% endfor %}
+
+<br />
+<br />
+
+{% if previous_page != 0 %}
+    <a href="/{{ urltype }}/{{ type }}/{{ previous_page }}/">previous page</a>
+{% endif %}
+
+{% for page in pageresult %}
+    {% if page != 0 %}
+    <a href="/{{ urltype }}/{{ type }}/{{ page }}/">{{ page }}</a>
+    {% elif page == 0 %}
+        ...
+    {% endif %}
+{% endfor %}
+
+
+{% if next_page != 0 %}
+    <a href="/{{ urltype }}/{{ type }}/{{ next_page }}/">next page</a>
+{% endif %}
+<br />
+<br />
+
+{% include 'footer.html' %}
