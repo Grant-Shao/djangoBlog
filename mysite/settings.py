@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'p3t^5+dsb#w(#e2+a103339dc1p6%&4$p#67^oew)@lj1k0u0*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -63,14 +63,9 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                # 'django.template.context_processors.i18n', #later
-                # 'django.template.context_processors.media', #
-                # 'django.template.context_processors.static', #
-                # 'django.template.context_processors.tz', #
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
                 'mysite.VAR.LANG',
             ],
         },

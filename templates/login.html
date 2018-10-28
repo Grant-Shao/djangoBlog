@@ -1,0 +1,17 @@
+{% include 'header.html' %}
+{% load static %}
+<div class="col-md-3">
+    <h1>{{ SITE }}</h1>
+
+<div class="col-md-2">
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="username" />
+        <input type="text" name="password" />
+        <input type="submit" value="submit">
+    </form>
+
+</div>
+
+{% include 'footer.html' %}

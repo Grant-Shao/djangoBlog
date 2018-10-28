@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
-
 </head>
 <body>
 <div class="main-container">
+    <a href="/login/">login</a><br />
+    欢迎 name:{{ username }},id:{{ userid }},login:{{ is_login }},<br />
+    <a href="/logout/">logout</a><br />
