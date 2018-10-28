@@ -1,10 +1,14 @@
 # _*_ coding:utf-8 _*_
 
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import render,HttpResponse,redirect,reverse,HttpResponseRedirect
 from django.views import View
 from .forms import *
 from .models import *
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth import authenticate,login
+
 
 class ProView(View):
     def dispatch(self, request, *args, **kwargs):
@@ -20,6 +24,33 @@ class ProView(View):
         else:
             handler = self.http_method_not_allowed
         return handler(request, *args, **kwargs)
+
+
+def logout(request):
+    request.session.flush()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class LoginView(View):
+    def get(self,request):
+        request.session['login_from'] = request.META.get('HTTP_REFERER', '/')
+        return render(request,'login.html')
+
+    def post(self,request):
+        username=request.POST.get('username',None)
+        password=request.POST.get('password',None)
+        try:
+            user=authenticate(request,username=username,password=password)
+        except:
+            user=None
+        if user is not None:
+            login(request,user)
+            request.session['is_login'] = True
+            request.session['user_id'] = str(user.id)
+            request.session['user_name'] = str(user)
+            return HttpResponseRedirect(request.session['login_from'])
+        else:
+            return HttpResponse(u'密码不对或者不存在')
 
 
 def pageGenerate(fullList,pagenum,urltype,type,currpage):
@@ -57,11 +88,13 @@ def pageGenerate(fullList,pagenum,urltype,type,currpage):
 
 
 class ArticleView(ProView):
+    # @method_decorator(login_required(login_url='login/'))
     def get(self,request,id):
         obj=ArticleSheet.objects.get(id=id)
         comments=CommentSheet.objects.filter(article_id=id)
         return render(request, 'article.html', {'obj':obj, 'comments':comments})
 
+    # @method_decorator(login_required(login_url='login/'))
     def CommentBotton(self,request,id):
         data={
             'comment':request.POST.get('comment'),
@@ -81,6 +114,7 @@ class PostView(View):
         obj = PostForm()
         return render(request, 'post.html', {'obj':obj})
 
+    # @method_decorator(login_required(login_url='login/'))
     def post(self,request):
         TagSheet.objects.get_or_create(tag=request.POST.get('tag'))
         data={
@@ -99,6 +133,7 @@ class PostView(View):
 
 
 class ListView(View):
+    # @method_decorator(login_required(login_url='login/'))
     def get(self,request,urltype,type,page):
         articles = ArticleSheet.objects.filter(type=type)
         return render(request,'list.html',pageGenerate(articles,10,urltype,type,page))
@@ -106,7 +141,6 @@ class ListView(View):
 
 class IndexView(View):
     def get(self,request):
-        # return render(request,'index.html',{'test':'test111'})
         types=TypeSheet.objects.all()
         tags=TagSheet.objects.all()
         articles=ArticleSheet.objects.all()[:20]
@@ -116,3 +150,5 @@ class IndexView(View):
             'articles':articles,
         }
         return render(request, 'index.html', context)
+
+
